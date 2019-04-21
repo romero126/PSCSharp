@@ -1,8 +1,43 @@
 <CommandAlias>
     <Command Name="Write-Host" Type="Simple">
         <Call>
-            #Note this is a simple CommandLine Exercise it will not WORK correctly with MultiParameter options yet.
-            "Console.WriteLine( {0} );" -f ($args -join ",")
+            param(
+                [Parameter()]
+                [string[]]$Object,
+                [Parameter()]
+                [Switch]$NoNewLine,
+                [Parameter()]
+                [String]$ForeGroundColor,
+                [Parameter()]
+                [String]$BackgroundColor
+            )
+
+            $Command = "Console.WriteLine"
+
+            if ($NoNewLine) {
+                $Command = "Console.Write"
+            }
+
+            if ($ForeGroundColor)
+            {
+                "Console.ForegroundColor = System.ConsoleColor.{0};" -f $ForegroundColor
+            }
+            if ($BackgroundColor)
+            {
+                "Console.BackgroundColor = System.ConsoleColor.{0};" -f $BackgroundColor
+            }
+            "{0}(`"{1}`");" -f $Command, ($Object -join " ")
+
+            if ($ForeGroundColor)
+            {
+                "Console.ForegroundColor = Host.UI.RawUI.ForegroundColor;"
+            }
+            if ($BackgroundColor)
+            {
+                "Console.BackgroundColor = Host.UI.RawUI.BackgroundColor;"
+            }
+            ""
+
         </Call>
     </Command>
 </CommandAlias>
