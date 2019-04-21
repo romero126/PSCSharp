@@ -27,7 +27,7 @@ function Write-TestValue
 
     process
     {
-        write-host "hello World"
+        write-host "hello World";Write-Host "From", "The", "Stacked"
     }
 
     end
