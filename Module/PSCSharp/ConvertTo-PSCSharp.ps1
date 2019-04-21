@@ -14,7 +14,6 @@ function ConvertTo-PSCSharp
     }
     process
     {
-
         if (-not (Test-Path -Path $Path -PathType Leaf))
         {
             throw "Could not find file"
@@ -77,9 +76,9 @@ function ConvertTo-PSCSharp
                 }
 
                 $Blocks = [Ordered]@{
-                    'BeginProcessing'   = $Function.Body.BeginBlock.ToString()
-                    'ProcessRecord'     = $Function.Body.ProcessBlock.ToString()
-                    'EndProcessing'     = $Function.Body.EndBlock.ToString()
+                    'BeginProcessing'   = $Function.Body.BeginBlock
+                    'ProcessRecord'     = $Function.Body.ProcessBlock
+                    'EndProcessing'     = $Function.Body.EndBlock
                 }
                 foreach ($Block in $Blocks.GetEnumerator())
                 {
@@ -89,11 +88,21 @@ function ConvertTo-PSCSharp
                     "`t`tprotected override void {0}()" -f $Block.Key
                     "`t`t{"
                     "`t`t`t/// Code is not Generated Automatically you still need to program"
-                    "`t`t`t/*"
-                    $Block.Value -split "`n" | Select-Object -Skip 2 | Select-Object -SkipLast 1 | % {
-                        "`t`t`t`t{0}" -f $_
+                    foreach ($AstItem in $Block.Value)
+                    {
+                        foreach ($PipelineElement in $AstItem.Statements.PipelineElements)
+                        {
+                            #Find Elements                 
+                            $Result = Get-PSCSharpCommandAlias -Name $PipelineElement.CommandElements[0] -Elements ( $PipelineElement.CommandElements | Select -Skip 1 )
+
+                            if (!$Result)
+                            {
+                                $Result = "// $PipelineElement"
+                            }
+                            "`t`t`t$Result"   
+                        }
+
                     }
-                    "`t`t`t*/"
                     "`t`t}"
                     ""
 
