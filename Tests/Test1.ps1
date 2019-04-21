@@ -27,10 +27,12 @@ function Write-TestValue
 
     process
     {
+        Write-Host -Object "asdf" -NoNewLine -ForeGroundColor Yellow -BackgroundColor Blue
         write-host "hello World";Write-Host "From", "The", "Stacked"
     }
 
     end
+
     {
 
     }
