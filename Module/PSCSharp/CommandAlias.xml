@@ -1,0 +1,8 @@
+<CommandAlias>
+    <Command Name="Write-Host" Type="Simple">
+        <Call>
+            #Note this is a simple CommandLine Exercise it will not WORK correctly with MultiParameter options yet.
+            "Console.WriteLine( {0} );" -f ($args -join ",")
+        </Call>
+    </Command>
+</CommandAlias>
