@@ -93,13 +93,17 @@ function ConvertTo-PSCSharp
                         foreach ($PipelineElement in $AstItem.Statements.PipelineElements)
                         {
                             #Find Elements                 
-                            $Result = Get-PSCSharpCommandAlias -Name $PipelineElement.CommandElements[0] -Elements ( $PipelineElement.CommandElements | Select -Skip 1 )
+                            $Results = Get-PSCSharpCommandAlias -Name $PipelineElement.CommandElements[0] -Elements ( $PipelineElement.CommandElements | Select -Skip 1 )
 
-                            if (!$Result)
+                            #if (!$Results)
+                            #{
+                            #    $Results = @("// $PipelineElement")
+                            #}
+                            "`t`t`t// $PipelineElement"
+                            foreach ($Result in $Results)
                             {
-                                $Result = "// $PipelineElement"
+                                "`t`t`t$Result"
                             }
-                            "`t`t`t$Result"   
                         }
 
                     }
